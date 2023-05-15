@@ -6,12 +6,12 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const dotenv = require("dotenv");
 
-const rootRouter = require("./Router/rootRouter");
-const User = require("./Models/users");
-const Comment = require("./Models/comment");
-const Img = require("./Models/img.js");
-const SaveImg = require("./Models/save_img");
-const { privateAPI } = require("./utils/jwt");
+const rootRouter = require("./src/Router/rootRouter");
+const User = require("./src/Models/users");
+const Comment = require("./src/Models/comment");
+const Img = require("./src/Models/img.js");
+const SaveImg = require("./src/Models/save_img");
+ 
 
 
 app.use(cors());
