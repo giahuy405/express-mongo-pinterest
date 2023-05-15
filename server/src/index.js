@@ -11,6 +11,7 @@ const User = require("./Models/users");
 const Comment = require("./Models/comment");
 const Img = require("./Models/img.js");
 const SaveImg = require("./Models/save_img");
+const { privateAPI } = require("./utils/jwt");
 
 
 app.use(cors());

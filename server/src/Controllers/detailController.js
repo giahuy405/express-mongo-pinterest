@@ -1,14 +1,16 @@
 const { successCode, errorCode, failCode } = require("../utils/response");
 const SaveImg = require("../Models/save_img.js");
 const Comment = require("../Models/comment.js");
+const Imgs = require("../Models/img.js");
+
 const mongoose = require("mongoose");
 
 const getInfoImageAndUser = async (req, res) => {
   try {
-    const { img_id } = req.body;
-    const foundImg = await SaveImg.findOne({ img_id })
+    const { _id } = req.body;
+    const foundImg = await Imgs.findOne({ _id })
       .populate("user_id", "fullname email age avatar")
-      .populate("img_id", "img_name img_url img_description");
+    
     if (!foundImg) return failCode(res);
 
     successCode(res, "Found image", foundImg);

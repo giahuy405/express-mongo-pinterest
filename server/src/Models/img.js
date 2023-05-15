@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');const imgSchema = new mongoose.Schema({
-  img_name: { type: String },
-  img_url: { type: String },
-  img_description: { type: String },
+  img_name: { type: String , required: true},
+  img_url: { type: String, required: true },
+  img_description: { type: String , required: true},
   user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 });
 

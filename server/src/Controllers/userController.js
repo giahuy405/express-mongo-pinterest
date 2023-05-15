@@ -43,7 +43,8 @@ const signUpUser = async (req, res) => {
       fullname,
       email,
       age,
-      avatar:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQjblwVQ-GlXCaTJnkev2wwBkrWAZQzUehfQ&usqp=CAU",
+      avatar:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQjblwVQ-GlXCaTJnkev2wwBkrWAZQzUehfQ&usqp=CAU",
       password: bcrypt.hashSync(password, 12),
     };
     // check email trùng

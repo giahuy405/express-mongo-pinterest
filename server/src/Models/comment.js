@@ -11,7 +11,7 @@
       required: true,
     },
     date_comment: { type: Date, default: Date.now },
-    content_comment: { type: String },
+    content_comment: { type: String , required: true},
   });
 
   const Comment = mongoose.model("Comment", commentSchema);

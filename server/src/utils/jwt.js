@@ -10,7 +10,7 @@ const generateToken = (data) => {
   // data: string, number, object, buffer => ko có tham số thứ 3, nếu có tham số thứ 3 thì data ko dc truyền string
   let token = jwt.sign(newData, "node-30", {
     algorithm: "HS256",
-    expiresIn: "30d",
+    expiresIn: "3y",
   });
   return token;
 };
@@ -24,6 +24,7 @@ const checkToken = (token) => {
 const decodeToken = (token) => {
   return jwt.decode(token);
 };
+
 const privateAPI = (req, res, next) => {
   try {
     // kiểm tra token
