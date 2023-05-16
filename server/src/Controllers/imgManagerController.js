@@ -83,7 +83,7 @@ cloudinary.config({
   api_key: "211669555581787",
   api_secret: "HryfQ_Cb6VnjYS4x_ei7m8zG9dU",
 });
-
+// đối với vercel nó ko hỗ trợ tạo file tmp 
 const addNewImageFile = async (req, res) => {
   try {
     const { img_name, img_description, user_id } = req.body;
