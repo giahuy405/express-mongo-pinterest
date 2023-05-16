@@ -3,7 +3,7 @@ const User = require("../Models/users.js");
 const SaveImg = require("../Models/save_img.js");
 const Imgs = require("../Models/img.js");
 const bcrypt = require("bcrypt");
-
+const multer = require("multer");
 const getInfoUser = async (req, res) => {
   try {
     const { _id } = req.body;
@@ -43,29 +43,66 @@ const deleteImage = async (req, res) => {
     errorCode(res);
   }
 };
-const addNewImage = async (req, res) => {
-  try {
-    const { img_name, img_url, img_description, user_id } = req.body;
+// const addNewImage = async (req, res) => {
+//   try {
+//     const { img_name, img_url, img_description, user_id } = req.body;
 
-    let checkUser = await Imgs.create({
-      img_name,
-      img_url,
-      img_description,
-      user_id,
-    });
-    successCode(res, " successfully", checkUser);
-  } catch (err) {
-    errorCode(res);
-  }
-};
+//     let checkUser = await Imgs.create({
+//       img_name,
+//       img_url,
+//       img_description,
+//       user_id,
+//     });
+//     successCode(res, " successfully", checkUser);
+//   } catch (err) {
+//     errorCode(res);
+//   }
+// };
+
+// upload file
+const Storage = multer.diskStorage({
+  destination: "uploads",
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+const upload = multer({
+  storage: Storage,
+}).single("img_url"); // this place need to have the same name when uploading
+
+const addNewImageFile = async (req, res) =>
+  upload(req, res, (err) => {
+    const { img_name, img_description, user_id } = req.body;
+    if (err) console.log(err);
+    else {
+      const newImage = new Imgs({
+        img_name,
+        img_description,
+        user_id,
+        img_url: {
+          data: req.file.filename,
+          contentType: "/image/png", // contentType: req.file.mimetype,
+        },
+      });
+      newImage
+        .save()
+        .then(() => res.send("successfully uploaded"))
+        .catch((err) => console.log(err));
+    }
+  });
 const putInfoUser = async (req, res) => {
   try {
-    const {email,password,fullname,age,avatar, user_id } = req.body;
-
+    const { email, password, fullname, age, avatar, user_id } = req.body;
+     // check email trùng
+    let checkEmail = await User.findOne({ email });
+    if (checkEmail) {
+      failCode(res, "Email đã tồn tại", "");
+      return;
+    }
     // Check if user with the provided ID exists in the database
     const foundUser = await User.findById(user_id);
     if (!foundUser) {
-      return failCode(res,'User not found')
+      return failCode(res, "User not found");
     }
 
     // Update user information
@@ -82,11 +119,13 @@ const putInfoUser = async (req, res) => {
     errorCode(res);
   }
 };
+
 module.exports = {
   getInfoUser,
   getSaveImg,
   getImageOfUser,
   deleteImage,
-  addNewImage,
+  // addNewImage,
   putInfoUser,
+  addNewImageFile,
 };

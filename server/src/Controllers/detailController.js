@@ -9,8 +9,8 @@ const getInfoImageAndUser = async (req, res) => {
   try {
     const { _id } = req.body;
     const foundImg = await Imgs.findOne({ _id })
-      .populate("user_id", "fullname email age avatar")
-    
+    .populate("user_id", "fullname email age avatar")
+
     if (!foundImg) return failCode(res);
 
     successCode(res, "Found image", foundImg);
