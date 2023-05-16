@@ -22,7 +22,7 @@ dotenv.config();
 
 app.use("/api", rootRouter);
 
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.PORT;
 
 mongoose
   .connect(process.env.MONGO_URL, {
