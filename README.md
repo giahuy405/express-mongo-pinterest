@@ -1,1 +1,1 @@
-# pinterest-back-end
+# express-mongo-pinterest
