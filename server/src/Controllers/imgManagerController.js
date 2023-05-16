@@ -4,6 +4,8 @@ const SaveImg = require("../Models/save_img.js");
 const Imgs = require("../Models/img.js");
 const bcrypt = require("bcrypt");
 const multer = require("multer");
+const path = require('path');
+
 const getInfoUser = async (req, res) => {
   try {
     const { _id } = req.body;
@@ -59,13 +61,24 @@ const deleteImage = async (req, res) => {
 //   }
 // };
 
-// upload file
+// local
+// const Storage = multer.diskStorage({
+//   destination: "tmp/uploads",
+//   filename: (req, file, cb) => {
+//     // cb(null, file.originalname); local
+//   },
+// });
+
+// deployment
 const Storage = multer.diskStorage({
-  destination: "tmp/uploads",
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, 'tmp', 'uploads'));
+  },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
   },
 });
+
 const upload = multer({
   storage: Storage,
 }).single("img_url"); // this place need to have the same name when uploading
