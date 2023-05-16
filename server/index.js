@@ -11,8 +11,6 @@ const User = require("./src/Models/users");
 const Comment = require("./src/Models/comment");
 const Img = require("./src/Models/img.js");
 const SaveImg = require("./src/Models/save_img");
- 
-
 
 app.use(cors());
 app.use(express.json());
@@ -33,7 +31,7 @@ mongoose
   })
   .then(() => {
     app.listen(PORT);
-    
+
     // User.insertMany([
     //   {
     //     _id: "6371251df03239e680000033",
