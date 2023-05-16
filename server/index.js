@@ -5,8 +5,13 @@ const cors = require("cors");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const dotenv = require("dotenv");
-
+const fileUpload = require('express-fileupload');
 const rootRouter = require("./src/Router/rootRouter");
+app.use(fileUpload({
+  useTempFiles:true,
+  limits:{fileSize: 50 * 2024 * 1024 }
+}))
+
 
 app.use(cors());
 app.use(express.json());

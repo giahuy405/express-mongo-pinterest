@@ -4,9 +4,6 @@ const SaveImg = require("../Models/save_img.js");
 const Imgs = require("../Models/img.js");
 const bcrypt = require("bcrypt");
 const multer = require("multer");
-const { v4: uuidv4 } = require('uuid');
-const fs = require('fs');
-
 
 const getInfoUser = async (req, res) => {
   try {
@@ -47,74 +44,74 @@ const deleteImage = async (req, res) => {
     errorCode(res);
   }
 };
-// const addNewImage = async (req, res) => {
-//   try {
-//     const { img_name, img_url, img_description, user_id } = req.body;
 
-//     let checkUser = await Imgs.create({
-//       img_name,
-//       img_url,
-//       img_description,
-//       user_id,
-//     });
-//     successCode(res, " successfully", checkUser);
-//   } catch (err) {
-//     errorCode(res);
-//   }
-// };
-
-// local
+// ==========local uploading=========
 // const Storage = multer.diskStorage({
 //   destination: "tmp/uploads",
 //   filename: (req, file, cb) => {
 //     // cb(null, file.originalname); local
 //   },
 // });
+// const upload = multer({
+//   storage: Storage,
+// }).single("img_url"); // this place need to have the same name when uploading
+// const addNewImageFile = async (req, res) =>
+//   upload(req, res, (err) => {
+//     const { img_name, img_description, user_id } = req.body;
+//     if (err) console.log(err);
+//     else {
+//       const newImage = new Imgs({
+//         img_name,
+//         img_description,
+//         user_id,
+//         img_url: {
+//           data: req.file.filename,
+//           contentType: "/image/png", // contentType: req.file.mimetype,
+//         },
+//       });
+//       newImage
+//         .save()
+//         .then(() => res.send("successfully uploaded"))
+//         .catch((err) => console.log(err));
+//     }
+//   });
 
-
-const uploadDir = 'tmp/uploads';
-// deployment
-const Storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const filename = uuidv4() + path.extname(file.originalname);
-    cb(null, filename);
-  },
+// upload on cloundinary
+const cloudinary = require("cloudinary").v2;
+// Configuration
+cloudinary.config({
+  cloud_name: "driba3vfy",
+  api_key: "211669555581787",
+  api_secret: "HryfQ_Cb6VnjYS4x_ei7m8zG9dU",
 });
 
-const upload = multer({
-  storage: Storage,
-}).single("img_url"); // this place need to have the same name when uploading
-
-const addNewImageFile = async (req, res) =>
-  upload(req, res, (err) => {
+const addNewImageFile = async (req, res) => {
+  try {
     const { img_name, img_description, user_id } = req.body;
-    if (err) console.log(err);
-    else {
-      const newImage = new Imgs({
-        img_name,
-        img_description,
-        user_id,
-        img_url: {
-          data: req.file.filename,
-          contentType: "/image/png", // contentType: req.file.mimetype,
-        },
-      });
-      newImage
-        .save()
-        .then(() => res.send("successfully uploaded"))
-        .catch((err) => console.log(err));
-    }
-  });
+    const file = req.files.img_url;
+    const result = await cloudinary.uploader.upload(file.tempFilePath, {
+      public_id: `${Date.now()}`,
+      resource_type: "auto",
+      folder: "images",
+    });
+    console.log(result);
+    let newData = {
+      img_name,
+      img_description,
+      user_id,
+      img_url: result.url,
+    };
+    await Imgs.create(newData);
+    successCode(res, "  thành công", newData);
+  } catch (err) {
+    errorCode(res);
+  }
+};
+
 const putInfoUser = async (req, res) => {
   try {
     const { email, password, fullname, age, avatar, user_id } = req.body;
-     // check email trùng
+    // check email trùng
     let checkEmail = await User.findOne({ email });
     if (checkEmail) {
       failCode(res, "Email đã tồn tại", "");
@@ -146,7 +143,6 @@ module.exports = {
   getSaveImg,
   getImageOfUser,
   deleteImage,
-  // addNewImage,
   putInfoUser,
   addNewImageFile,
 };
