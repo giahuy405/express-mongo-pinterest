@@ -3,7 +3,7 @@ const User = require("../Models/users.js");
 const SaveImg = require("../Models/save_img.js");
 const Imgs = require("../Models/img.js");
 const bcrypt = require("bcrypt");
-const multer = require("multer");
+// const multer = require("multer");
 const getInfoUser = async (req, res) => {
   try {
     const { _id } = req.body;
@@ -127,5 +127,5 @@ module.exports = {
   deleteImage,
   // addNewImage,
   putInfoUser,
-  addNewImageFile,
+  // addNewImageFile,
 };

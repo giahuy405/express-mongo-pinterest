@@ -1,5 +1,5 @@
 const express = require("express");
-const {getInfoUser ,getSaveImg ,getImageOfUser,deleteImage,putInfoUser,addNewImageFile} = require("../Controllers/imgManagerController.js");
+const {getInfoUser ,getSaveImg ,getImageOfUser,deleteImage,putInfoUser} = require("../Controllers/imgManagerController.js");
 const imgManagerRouter = express.Router();
 
 imgManagerRouter.get('/info-user',getInfoUser);
