@@ -60,36 +60,36 @@ const deleteImage = async (req, res) => {
 // };
 
 // upload file
-const Storage = multer.diskStorage({
-  destination: "src/uploads",
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
-const upload = multer({
-  storage: Storage,
-}).single("img_url"); // this place need to have the same name when uploading
+// const Storage = multer.diskStorage({
+//   destination: "src/uploads",
+//   filename: (req, file, cb) => {
+//     cb(null, file.originalname);
+//   },
+// });
+// const upload = multer({
+//   storage: Storage,
+// }).single("img_url"); // this place need to have the same name when uploading
 
-const addNewImageFile = async (req, res) =>
-  upload(req, res, (err) => {
-    const { img_name, img_description, user_id } = req.body;
-    if (err) console.log(err);
-    else {
-      const newImage = new Imgs({
-        img_name,
-        img_description,
-        user_id,
-        img_url: {
-          data: req.file.filename,
-          contentType: "/image/png", // contentType: req.file.mimetype,
-        },
-      });
-      newImage
-        .save()
-        .then(() => res.send("successfully uploaded"))
-        .catch((err) => console.log(err));
-    }
-  });
+// const addNewImageFile = async (req, res) =>
+//   upload(req, res, (err) => {
+//     const { img_name, img_description, user_id } = req.body;
+//     if (err) console.log(err);
+//     else {
+//       const newImage = new Imgs({
+//         img_name,
+//         img_description,
+//         user_id,
+//         img_url: {
+//           data: req.file.filename,
+//           contentType: "/image/png", // contentType: req.file.mimetype,
+//         },
+//       });
+//       newImage
+//         .save()
+//         .then(() => res.send("successfully uploaded"))
+//         .catch((err) => console.log(err));
+//     }
+//   });
 const putInfoUser = async (req, res) => {
   try {
     const { email, password, fullname, age, avatar, user_id } = req.body;
