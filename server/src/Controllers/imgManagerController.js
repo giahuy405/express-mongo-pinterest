@@ -4,7 +4,9 @@ const SaveImg = require("../Models/save_img.js");
 const Imgs = require("../Models/img.js");
 const bcrypt = require("bcrypt");
 const multer = require("multer");
-const path = require('path');
+const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
+
 
 const getInfoUser = async (req, res) => {
   try {
@@ -69,13 +71,19 @@ const deleteImage = async (req, res) => {
 //   },
 // });
 
+
+const uploadDir = 'tmp/uploads';
 // deployment
 const Storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, 'tmp', 'uploads'));
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname);
+    const filename = uuidv4() + path.extname(file.originalname);
+    cb(null, filename);
   },
 });
 
